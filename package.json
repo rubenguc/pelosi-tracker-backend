@@ -12,9 +12,11 @@
   "dependencies": {
     "drizzle-orm": "^0.45.2",
     "fast-xml-parser": "^4.4.1",
-    "hono": "^4.13.8"
+    "hono": "^4.13.8",
+    "unpdf": "^1.8.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260921.1",
     "drizzle-kit": "^0.31.10",
     "wrangler": "^4.110.0"
   }

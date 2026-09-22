@@ -3,6 +3,13 @@
   "name": "pelosi-tracker",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-22",
+  "rules": [
+    {
+      "type": "Data",
+      "globs": ["**/*.pdf"],
+      "fallthrough": true
+    }
+  ],
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],
