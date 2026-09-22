@@ -8,7 +8,7 @@ app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-app.route('/politician', politicianHandlers)
+app.route('/politicians', politicianHandlers)
 
 
 export default app
