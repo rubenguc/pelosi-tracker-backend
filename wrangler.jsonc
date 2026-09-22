@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "pelosi-tracker",
   "main": "src/index.ts",
-  "compatibility_date": "2026-09-22"
+  "compatibility_date": "2026-09-22",
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],
@@ -21,13 +21,14 @@
   //     "bucket_name": "my-bucket"
   //   }
   // ],
-  // "d1_databases": [
-  //   {
-  //     "binding": "MY_DB",
-  //     "database_name": "my-database",
-  //     "database_id": ""
-  //   }
-  // ],
+"d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pelosi-tracker-db",
+      "database_id": "pelosi",
+      "migrations_dir": "drizzle"
+    }
+  ],
   // "ai": {
   //   "binding": "AI"
   // },

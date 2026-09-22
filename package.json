@@ -4,12 +4,18 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:generate:local": "drizzle-kit generate --config=drizzle.config.local.ts",
+    "db:migrate:local": "wrangler d1 migrations apply pelosi-tracker-db --local",
+    "db:reset:local": "rm -rf .wrangler/state && npx wrangler d1 migrations apply pelosi-tracker-db --local"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "fast-xml-parser": "^4.4.1",
     "hono": "^4.13.8"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.10",
     "wrangler": "^4.110.0"
   }
 }
