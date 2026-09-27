@@ -1,16 +1,16 @@
-import pino from 'pino';
+import pino from "pino";
 
-type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 
 export function createLogger(env: { ENV?: string; LOG_LEVEL?: string }) {
-  const isLocal = env.ENV === 'local';
+  const isLocal = env.ENV === "local";
   const level: LogLevel =
-    (env.LOG_LEVEL as LogLevel) ?? (isLocal ? 'debug' : 'error');
+    (env.LOG_LEVEL as LogLevel) ?? (isLocal ? "debug" : "error");
 
   return pino({
     level,
     base: {
-      env: env.ENV ?? 'unknown',
+      env: env.ENV ?? "unknown",
     },
     timestamp: pino.stdTimeFunctions.isoTime,
     formatters: {

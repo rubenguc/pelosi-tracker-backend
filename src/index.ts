@@ -6,8 +6,11 @@ import { QueueMessage } from "./features/sync/types";
 import { processPdfMessage } from "./features/sync/processor";
 import { tradeHandlers } from "./features/trade/handlers";
 import { createLogger } from "./lib/logger";
+import { setupErrorHandling } from "./lib/http/setup";
 
 const app = new Hono<{ Bindings: Env }>();
+
+setupErrorHandling(app);
 
 app.get("/", (c) => c.json({ ok: true }));
 app.route("/politicians", politicianHandlers);
