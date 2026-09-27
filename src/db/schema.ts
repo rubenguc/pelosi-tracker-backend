@@ -67,6 +67,12 @@ export const syncRuns = sqliteTable('sync_runs', {
   errorMessage: text('error_message'),
 });
 
+export const syncState = sqliteTable('sync_state', {
+  key: text('key').primaryKey(),       // ej. 'house_zip_last_modified'
+  value: text('value').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
 export type Politician = typeof politicians.$inferSelect;
 export type NewPolitician = typeof politicians.$inferInsert;
 export type Filing = typeof filings.$inferSelect;
@@ -74,3 +80,4 @@ export type NewFiling = typeof filings.$inferInsert;
 export type Trade = typeof trades.$inferSelect;
 export type NewTrade = typeof trades.$inferInsert;
 export type SyncRun = typeof syncRuns.$inferSelect;
+export type SyncState = typeof syncState.$inferSelect;

@@ -22,7 +22,7 @@
     },
   ],
   "triggers": {
-    "crons": ["0 0,6,12,18 * * *"],
+    "crons": ["0 0,6,12,18 * * 1-5"],
   },
   "queues": {
     "producers": [
@@ -31,10 +31,10 @@
     "consumers": [
       {
         "queue": "pdf-processing",
-        "max_batch_size": 10,
+        "max_batch_size": 5,
         "max_batch_timeout": 30,
         "max_retries": 3,
-        "max_concurrency": 5
+        "max_concurrency": 3
       }
     ]
   },

@@ -15,6 +15,13 @@
       "when": 1790514632397,
       "tag": "0001_handy_sage",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790521982972,
+      "tag": "0002_tricky_falcon",
+      "breakpoints": true
     }
   ]
 }

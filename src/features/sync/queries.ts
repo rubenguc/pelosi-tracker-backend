@@ -1,8 +1,11 @@
 import { eq, inArray } from 'drizzle-orm';
 import { getDb } from '../../db/client';
-import { filings, syncRuns } from '../../db/schema';
-import type { Filing, NewFiling, SyncRun } from '../../db/schema';
+import { filings, syncRuns, syncState } from '../../db/schema';
+import type { NewFiling, SyncRun } from '../../db/schema';
 import { batchSizeForColumns, chunk } from '../../lib/d1';
+
+const HOUSE_ZIP_KEY = 'house_zip_last_modified';
+
 
 export async function createSyncRun(env: Env): Promise<number> {
   const [row] = await getDb(env)
@@ -105,4 +108,29 @@ export async function getRecentSyncRuns(
     .orderBy(syncRuns.id)
     .limit(limit)
     .all();
+}
+
+
+export async function getZipLastModified(env: Env): Promise<string | null> {
+  const row = await getDb(env)
+    .select({ value: syncState.value })
+    .from(syncState)
+    .where(eq(syncState.key, HOUSE_ZIP_KEY))
+    .get();
+  return row?.value ?? null;
+}
+
+export async function setZipLastModified(
+  env: Env,
+  value: string,
+): Promise<void> {
+  const now = new Date().toISOString();
+  await getDb(env)
+    .insert(syncState)
+    .values({ key: HOUSE_ZIP_KEY, value, updatedAt: now })
+    .onConflictDoUpdate({
+      target: syncState.key,
+      set: { value, updatedAt: now },
+    })
+    .execute();
 }
