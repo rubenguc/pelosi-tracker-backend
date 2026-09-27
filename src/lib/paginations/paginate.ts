@@ -7,7 +7,7 @@ type PaginateOptions = {
   /** Filtros WHERE (opcional). Puede ser un SQL suelto o un array que se combina con AND. */
   where?: SQL | SQL[];
   /** Orden (opcional). Si no se pasa, SQLite devuelve en orden físico. */
-  orderBy?: SQL;
+  orderBy?: SQL | SQL[];   // ← ahora acepta array
   /** Parámetros de paginación. Requerido. */
   params: PaginationParams;
 };
@@ -61,7 +61,16 @@ export async function paginate<T>(
   // 3. Data
   const dataQuery = db.select().from(table);
   if (whereClause) dataQuery.where(whereClause);
-  if (orderBy) dataQuery.orderBy(orderBy);
+
+  if (orderBy) {
+    if (Array.isArray(orderBy)) {
+      dataQuery.orderBy(...orderBy);
+    } else {
+      dataQuery.orderBy(orderBy);
+    }
+  }
+
+
   const data = (await dataQuery.limit(params.limit).offset(params.offset)) as T[];
 
   // 4. Metadata
