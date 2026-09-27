@@ -1,0 +1,188 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "697050c0-edd6-4b47-b732-b1ed355e3dc4",
+  "prevId": "b8f02b3c-42e2-41e6-9d78-82e75da71c7e",
+  "tables": {
+    "politicians": {
+      "name": "politicians",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fullname": {
+          "name": "fullname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_sync": {
+          "name": "last_sync",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_available_in_bot": {
+          "name": "is_available_in_bot",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "idx_politicians_fullname": {
+          "name": "idx_politicians_fullname",
+          "columns": [
+            "fullname"
+          ],
+          "isUnique": false
+        },
+        "idx_politicians_available": {
+          "name": "idx_politicians_available",
+          "columns": [
+            "is_available_in_bot"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "trades": {
+      "name": "trades",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "politician_id": {
+          "name": "politician_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "stock": {
+          "name": "stock",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transaction": {
+          "name": "transaction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "filed": {
+          "name": "filed",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "traded": {
+          "name": "traded",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_trades_politician_id": {
+          "name": "idx_trades_politician_id",
+          "columns": [
+            "politician_id"
+          ],
+          "isUnique": false
+        },
+        "idx_trades_filed": {
+          "name": "idx_trades_filed",
+          "columns": [
+            "filed"
+          ],
+          "isUnique": false
+        },
+        "idx_trades_traded": {
+          "name": "idx_trades_traded",
+          "columns": [
+            "traded"
+          ],
+          "isUnique": false
+        },
+        "idx_trades_stock": {
+          "name": "idx_trades_stock",
+          "columns": [
+            "stock"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "trades_politician_id_politicians_id_fk": {
+          "name": "trades_politician_id_politicians_id_fk",
+          "tableFrom": "trades",
+          "tableTo": "politicians",
+          "columnsFrom": [
+            "politician_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
