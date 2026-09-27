@@ -1,23 +1,19 @@
-import { getDb, type DbEnv } from '../../db/client';
+import { getDb } from '../../db/client';
 import { politicians } from '../../db/schema';
 import { parseHouseXml, normalizeName } from '../../lib/xml';
 import { unzipSync, strFromU8 } from 'fflate';
 import {
   createSyncRun,
   finishSyncRun,
-  findExistingFilingIds,
+
   insertFilings,
 } from './queries';
 import type { QueueMessage, DiscoverResult } from './types';
 import { chunk } from '../../lib/d1';
 
-type SyncEnv = DbEnv & {
-  PDF_QUEUE: Queue<QueueMessage>;
-};
-
 const QUEUE_BATCH_SIZE = 100;
 
-export async function discoverNewFilings(env: SyncEnv): Promise<DiscoverResult> {
+export async function discoverNewFilings(env: Env): Promise<DiscoverResult> {
   const runId = await createSyncRun(env);
   const YEAR = new Date().getFullYear();
     const DEFAULT_ZIP_URL =
@@ -114,7 +110,5 @@ function buildPdfUrl(filingId: string): string {
   const YEAR = new Date().getFullYear();
 
   // Los PDFs del House viven en /ptr-pdfs/<year>/<docId>.pdf
-  // El año se puede derivar del ZIP (2026) o del filingDate.
-  // Simplificación: usamos el año actual del ZIP.
   return `https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/${YEAR}/${filingId}.pdf`;
 }

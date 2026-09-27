@@ -1,11 +1,10 @@
-// src/features/sync/queries.ts
-import { eq, and, inArray } from 'drizzle-orm';
-import { getDb, type DbEnv } from '../../db/client';
+import { eq, inArray } from 'drizzle-orm';
+import { getDb } from '../../db/client';
 import { filings, syncRuns } from '../../db/schema';
 import type { Filing, NewFiling, SyncRun } from '../../db/schema';
 import { batchSizeForColumns, chunk } from '../../lib/d1';
 
-export async function createSyncRun(env: DbEnv): Promise<number> {
+export async function createSyncRun(env: Env): Promise<number> {
   const [row] = await getDb(env)
     .insert(syncRuns)
     .values({ startedAt: new Date().toISOString(), status: 'running' })
@@ -14,7 +13,7 @@ export async function createSyncRun(env: DbEnv): Promise<number> {
 }
 
 export async function finishSyncRun(
-  env: DbEnv,
+  env: Env,
   id: number,
   status: 'success' | 'error',
   newFilings: number,
@@ -35,7 +34,7 @@ export async function finishSyncRun(
 const D1_IN_CLAUSE_LIMIT = 100;
 
 export async function findExistingFilingIds(
-  env: DbEnv,
+  env: Env,
   ids: string[],
 ): Promise<Set<string>> {
   if (ids.length === 0) return new Set();
@@ -63,7 +62,7 @@ const FILINGS_BATCH_SIZE = batchSizeForColumns(FILINGS_COLUMNS);
 // = floor(100 / 7) - 1 = 13
 
 export async function insertFilings(
-  env: DbEnv,
+  env: Env,
   rows: NewFiling[],
 ): Promise<string[]> {
   if (rows.length === 0) return [];
@@ -86,7 +85,7 @@ export async function insertFilings(
 }
 
 export async function markFilingParsed(
-  env: DbEnv,
+  env: Env,
   filingId: string,
 ): Promise<void> {
   await getDb(env)
@@ -97,7 +96,7 @@ export async function markFilingParsed(
 }
 
 export async function getRecentSyncRuns(
-  env: DbEnv,
+  env: Env,
   limit = 10,
 ): Promise<SyncRun[]> {
   return getDb(env)

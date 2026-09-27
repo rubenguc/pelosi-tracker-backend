@@ -1,5 +1,5 @@
 import { asc, desc, eq } from 'drizzle-orm';
-import { getDb, type DbEnv } from '../../db/client';
+import { getDb } from '../../db/client';
 import { trades } from '../../db/schema';
 import type { NewTrade } from '../../db/schema';
 import { batchSizeForColumns, chunk } from '../../lib/d1';
@@ -11,7 +11,7 @@ const TRADES_COLUMNS = 13;
 const TRADES_BATCH_SIZE = batchSizeForColumns(TRADES_COLUMNS);
 
 export async function insertTrades(
-  env: DbEnv,
+  env: Env,
   rows: NewTrade[],
 ): Promise<void> {
   if (rows.length === 0) return;
@@ -23,9 +23,8 @@ export async function insertTrades(
   }
 }
 
-
 export async function getTradesByPolitician(
-  env: DbEnv,
+  env: Env,
   politicianId: string,
   params: PaginationParams,
 ): Promise<PaginatedResult<Trade>> {
