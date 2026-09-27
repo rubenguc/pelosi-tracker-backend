@@ -39,6 +39,15 @@
     ]
   },
   "vars": {
-    "ENV": "local"
+    "ENV": "local",
+    "LOG_LEVEL": "debug"
+  },
+  "env": {
+    "production": {
+      "vars": {
+        "ENV": "production",
+        "LOG_LEVEL": "error"
+      }
+    }
   }
 }

@@ -3,13 +3,14 @@ declare module "*.pdf" {
   export default content;
 }
 
-
 import type { D1Database, Queue } from '@cloudflare/workers-types';
 
 declare global {
   type Env = {
     DB: D1Database;
     PDF_QUEUE: Queue;
+    ENV: string;
+    LOG_LEVEL: string;
   };
 }
 

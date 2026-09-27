@@ -5,50 +5,47 @@ import { discoverNewFilings } from "./features/sync/discovery";
 import { QueueMessage } from "./features/sync/types";
 import { processPdfMessage } from "./features/sync/processor";
 import { tradeHandlers } from "./features/trade/handlers";
+import { createLogger } from "./lib/logger";
 
 const app = new Hono<{ Bindings: Env }>();
 
-type Bindings = {
-  DB: D1Database;
-  PDF_QUEUE: Queue<QueueMessage>;
-  ENV: string;
-};
-
 app.get("/", (c) => c.json({ ok: true }));
 app.route("/politicians", politicianHandlers);
-app.route('/trades', tradeHandlers);
+app.route("/trades", tradeHandlers);
 app.route("/sync", syncHandlers);
 
 export default {
   fetch: app.fetch,
 
-  // Cron: 4 veces al día
   async scheduled(
     controller: ScheduledController,
-    env: Bindings,
+    env: Env,
     ctx: ExecutionContext,
   ): Promise<void> {
-    console.log(`[cron] disparado: ${controller.cron}`);
-    ctx.waitUntil(discoverNewFilings(env));
+    const log = createLogger(env);
+    log.info({ cron: controller.cron }, "cron triggered");
+    ctx.waitUntil(
+      discoverNewFilings(env).catch((err) => {
+        log.error({ err }, "discovery failed");
+      }),
+    );
   },
 
-  // Queue consumer
-  async queue(
-    batch: MessageBatch<QueueMessage>,
-    env: Bindings,
-    _ctx: ExecutionContext,
-  ): Promise<void> {
+  async queue(batch, env) {
+    const log = createLogger(env);
+    log.info({ count: batch.messages.length }, "queue batch received");
     for (const msg of batch.messages) {
       try {
-        const result = await processPdfMessage(msg.body, env);
-        console.log(
-          `[queue] processed ${msg.body.filingId}: ${result.tradesInserted} trades`,
+        const r = await processPdfMessage(msg.body, env);
+        log.info(
+          { filingId: msg.body.filingId, trades: r.tradesInserted },
+          "processed",
         );
         msg.ack();
       } catch (err) {
-        console.error(`[queue] failed ${msg.body.filingId}:`, err);
+        log.error({ err, filingId: msg.body.filingId }, "failed");
         msg.retry();
       }
     }
   },
-} satisfies ExportedHandler<Bindings, QueueMessage>;
+} satisfies ExportedHandler<Env, QueueMessage>;
