@@ -28,7 +28,7 @@ export default {
     const log = createLogger(env);
     log.info({ cron: controller.cron }, "cron triggered");
     ctx.waitUntil(
-      discoverNewFilings(env).catch((err) => {
+      discoverNewFilings(env, log).catch((err) => {
         log.error({ err }, "discovery failed");
       }),
     );

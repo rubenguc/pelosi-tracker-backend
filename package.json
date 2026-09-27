@@ -5,6 +5,7 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "dev:cron": "wrangler dev --test-scheduled",
     "db:generate:local": "drizzle-kit generate --config=drizzle.config.local.ts",
     "db:migrate:local": "wrangler d1 migrations apply pelosi-tracker-db --local",
     "db:reset:local": "rm -rf .wrangler/state && npx wrangler d1 migrations apply pelosi-tracker-db --local"

@@ -3,7 +3,7 @@ import { politicians } from "../../db/schema";
 import { parseHouseXml, normalizeName } from "../../lib/xml";
 import { unzipSync, strFromU8 } from "fflate";
 import { createSyncRun, finishSyncRun, insertFilings } from "./queries";
-import type { QueueMessage, DiscoverResult } from "./types";
+import type {  DiscoverResult } from "./types";
 import { chunk } from "../../lib/d1";
 import { Logger } from "../../lib/logger";
 
