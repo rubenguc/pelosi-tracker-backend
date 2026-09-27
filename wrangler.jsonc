@@ -3,44 +3,42 @@
   "name": "pelosi-tracker",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-22",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "rules": [
     {
       "type": "Data",
       "globs": ["**/*.pdf"],
-      "fallthrough": true
-    }
+      "fallthrough": true,
+    },
   ],
-  // "compatibility_flags": [
-  //   "nodejs_compat"
-  // ],
-  // "vars": {
-  //   "MY_VAR": "my-variable"
-  // },
-  // "kv_namespaces": [
-  //   {
-  //     "binding": "MY_KV_NAMESPACE",
-  //     "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  //   }
-  // ],
-  // "r2_buckets": [
-  //   {
-  //     "binding": "MY_BUCKET",
-  //     "bucket_name": "my-bucket"
-  //   }
-  // ],
-"d1_databases": [
+  "d1_databases": [
     {
       "binding": "DB",
       "database_name": "pelosi-tracker-db",
       "database_id": "pelosi",
-      "migrations_dir": "drizzle"
-    }
+      "migrations_dir": "drizzle",
+    },
   ],
-  // "ai": {
-  //   "binding": "AI"
-  // },
-  // "observability": {
-  //   "enabled": true,
-  //   "head_sampling_rate": 1
-  // }
+  "triggers": {
+    "crons": ["0 0,6,12,18 * * *"],
+  },
+  "queues": {
+    "producers": [
+      { "binding": "PDF_QUEUE", "queue": "pdf-processing" }
+    ],
+    "consumers": [
+      {
+        "queue": "pdf-processing",
+        "max_batch_size": 10,
+        "max_batch_timeout": 30,
+        "max_retries": 3,
+        "max_concurrency": 5
+      }
+    ]
+  },
+  "vars": {
+    "ENV": "local"
+  }
 }
